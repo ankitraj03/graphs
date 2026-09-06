@@ -246,17 +246,16 @@ class TestUnifiedFileTokenizer(unittest.TestCase):
         with self.assertRaises(UnsupportedLanguageError):
             self.tokenizer.tokenize(unknown_file)
 
-    def test_scan_directory(self) -> None:
-        (self.root / "a.py").write_text("import os\n", encoding="utf-8")
-        (self.root / "b.py").write_text("from .a import x\n", encoding="utf-8")
-        (self.root / "c.cpp").write_text("#include <stdio.h>\n", encoding="utf-8")
+    def test_single_file_tokenization_only(self) -> None:
+        """Verify FileTokenizer processes individual files and does not expose directory scanning."""
+        self.assertFalse(hasattr(self.tokenizer, "scan_directory"))
 
-        results = self.tokenizer.scan_directory(self.root)
-        self.assertIsInstance(results, dict)
-        self.assertEqual(len(results), 3)
-
-        for file_path, dep_list in results.items():
-            self.assertIsInstance(dep_list, list)
+        py_file = self.root / "a.py"
+        py_file.write_text("import os\n", encoding="utf-8")
+        deps = self.tokenizer.tokenize(py_file)
+        self.assertIsInstance(deps, list)
+        self.assertEqual(len(deps), 1)
+        self.assertEqual(deps[0].target, "os")
 
     def test_serialization(self) -> None:
         py_file = self.root / "serial.py"

@@ -1,7 +1,7 @@
-"""Tokenizer package for scanning code files and extracting connecting keywords and dependencies.
+"""Single-file tokenizer package for extracting connecting keywords and dependencies.
 
-Exposes a class-based architecture where methods return arrays (lists) of dependency
-tokens, target files/modules, and connecting keywords.
+Exposes a class-based architecture where methods operate on one file at a time
+and return arrays (lists) of dependency tokens, target files/modules, and connecting keywords.
 """
 
 from __future__ import annotations

@@ -185,20 +185,15 @@ class TestProjectDependencyScan(unittest.TestCase):
         self.assertIn("import", keywords)
         self.assertIn("require", keywords)
 
-    def test_scan_entire_project_directory(self) -> None:
-        """Verify scanning the entire project directory produces a complete dependency map."""
-        project_map = self.tokenizer.scan_directory(self.repo_root)
+    def test_tokenize_individual_project_files(self) -> None:
+        """Verify scanning individual project files one by one produces dependency tokens and no directory scanning exists."""
+        self.assertFalse(hasattr(self.tokenizer, "scan_directory"))
 
-        self.assertIsInstance(project_map, dict)
-        self.assertIn(str(self.main_file), project_map)
-        self.assertIn(str(self.config_file), project_map)
-        self.assertIn(str(self.auth_file), project_map)
-        self.assertIn(str(self.cpp_file), project_map)
-        self.assertIn(str(self.ts_file), project_map)
-
-        # All values must be arrays (lists) of DependencyToken
-        for file_path, dep_list in project_map.items():
-            self.assertIsInstance(dep_list, list)
+        files = [self.main_file, self.config_file, self.auth_file, self.cpp_file, self.ts_file]
+        for f in files:
+            deps = self.tokenizer.tokenize(f)
+            self.assertIsInstance(deps, list)
+            self.assertTrue(len(deps) > 0)
 
 
 if __name__ == "__main__":
