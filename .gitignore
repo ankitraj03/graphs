@@ -3,8 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# C / C++ build artifacts
 *.so
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.lib
+*.a
 
 # Distribution / packaging
 .Python

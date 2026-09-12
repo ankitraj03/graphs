@@ -256,3 +256,7 @@ When reporting progress or proposing changes, provide:
 5. **Results & Metrics**: Quantitative findings (test pass counts, benchmark numbers).
 6. **Remaining risks or limitations**: Open items, assumptions, or follow-up tasks.
 
+## 14. Boundaries & Restrictions
+
+Don't use git add ., git commit and git push origin
+
