@@ -22,3 +22,7 @@ class NotADirectoryRepositoryError(ConnectorError, NotADirectoryError):
 
 class ScannerExecutionError(ConnectorError, RuntimeError):
     """Raised when the underlying scanner process fails to execute or returns an error."""
+
+
+class GraphDesignerExecutionError(ConnectorError, RuntimeError):
+    """Raised when the underlying graph designer process fails to execute or returns an error."""

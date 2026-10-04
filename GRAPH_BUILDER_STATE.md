@@ -13,7 +13,7 @@
 | **Phase 1** | **Scanner** | C++17 (`std::filesystem`) | **COMPLETE** | Verified via `test_scanner.exe`, standalone tests, and CLI |
 | **Phase 2** | **Tokenizer** | Python 3.12+ (`ast`, `re`) | **COMPLETE** | Verified via 25 unit/integration tests in `tests/` |
 | **Phase 3** | **Connector** | Python 3.12+ (C++ launcher) | **COMPLETE** | Verified via 11 tests in `test_connector.py` & audit |
-| **Phase 4** | **Graph Representation** | Python 3.12+ | **NOT STARTED** | Next milestone |
+| **Phase 4** | **Graph Designer** | C++14/C++17 | **COMPLETE** | Verified via 11 tests in `test_graph.exe` & `basic_graph.exe` |
 | **Phase 5** | **Storage & Persistence** | SQLite (WAL mode) / In-Memory | **PLANNED** | Schema and WAL batching outlined in `AGENTS.md` |
 | **Phase 6** | **Incremental Scans** | Python 3.12+ (mtime, BLAKE3) | **PLANNED** | State caching and dirty file detection |
 | **Phase 7** | **Query Engine** | Python 3.12+ | **PLANNED** | BFS/DFS traversal, cycle detection, SCC Tarjan |
@@ -69,6 +69,15 @@ Repository Path
   6. Strict non-speculation retention (`is_resolved=False`, `confidence="UNRESOLVED"`).
 - **Serialization**: Plain text relationship tree and structured JSON (`--json`).
 
+### Phase 4 — Graph Designer & Connector Integration (`graph-designer/` & `connector/`)
+- **Independent C++ Core**: In-memory directed graph in `graph-designer/` with fast bidirectional lookups, cycle-safe BFS/DFS, strict duplicate rejection, and self-edge prevention.
+- **Standalone CLI**: [`graph-designer/graph_designer.exe`](file:///D:/graphs/graph-designer/graph_designer.exe) consuming JSON over stdin and rendering graph models via `--to-string` or formatted banner.
+- **Subprocess Integration**: [`connector/graph_designer_adapter.py`](file:///D:/graphs/connector/graph_designer_adapter.py) bridges Python Connector with native `graph_designer.exe` (matching `ScannerAdapter`).
+- **Nodes = All Scanned Files**: Explicitly registers every file discovered by Scanner, guaranteeing isolated files exist as graph nodes.
+- **Edges = Resolved Internal Connections**: Granular tokenizer kinds mapped to `INCLUDE`, `IMPORT`, `REFERENCE` with full syntactic kinds preserved in edge metadata (`{"kind": ...}`).
+- **Strict Non-Speculation**: Unresolved external dependencies (`iostream`, `os`, `express`) remain strictly in Connector metadata and do not create speculative external graph nodes.
+- **Multi-Type Preservation**: Preserves distinct relationship types between the same source and target (e.g. `A --INCLUDE--> B` and `A --IMPORT--> B`).
+
 ---
 
 ## 4. Known Limitations & Architecture Constraints
@@ -81,6 +90,6 @@ Repository Path
 
 ## 5. Architectural Decisions Awaiting Resolution for Future Phases
 
-1. **Unresolved External Nodes**: In Phase 4 (Graph Representation), should third-party libraries (e.g. `react`, `express`, `numpy`) be modeled as dedicated `EXTERNAL` graph nodes with `confidence="UNRESOLVED"`, or stored only as metadata on file nodes?
-2. **Path Alias Support**: Should a light `tsconfig.json` reader be introduced in Phase 4 to resolve `@/...` aliases prior to graph edge construction?
-3. **Initial Graph Storage Backend**: Should Phase 4 implement the in-memory graph store first, or directly implement SQLite in WAL mode?
+1. **Phase 5 Storage Backend**: Should graph persistence directly implement SQLite in WAL mode with batch transactions (>80,000 writes/sec), or start with disk-backed flat files?
+2. **Path Alias Support**: Should a light `tsconfig.json` reader be introduced to resolve `@/...` aliases prior to graph edge construction?
+
