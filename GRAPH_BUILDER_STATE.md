@@ -1,8 +1,9 @@
 # Graph Builder — Project State & Memory
 
-**Last Updated**: 2026-10-04  
+**Last Updated**: 2026-10-06  
 **Maintained By**: `graph-builder-validator` (Graph Builder Validator Agent)  
-**Engineering Contract**: [`AGENTS.md`](file:///D:/graphs/AGENTS.md)
+**Engineering Contract**: [`AGENTS.md`](file:///D:/graphs/AGENTS.md)  
+**Validation Suite**: [`validator_e2e.py`](file:///D:/graphs/validator_e2e.py) | Report: [`GRAPH_BUILDER_VALIDATION_REPORT.md`](file:///D:/graphs/GRAPH_BUILDER_VALIDATION_REPORT.md)
 
 ---
 
@@ -14,10 +15,11 @@
 | **Phase 2** | **Tokenizer** | Python 3.12+ (`ast`, `re`) | **COMPLETE** | Verified via 25 unit/integration tests in `tests/` |
 | **Phase 3** | **Connector** | Python 3.12+ (C++ launcher) | **COMPLETE** | Verified via 11 tests in `test_connector.py` & audit |
 | **Phase 4** | **Graph Designer** | C++14/C++17 | **COMPLETE** | Verified via 11 tests in `test_graph.exe` & `basic_graph.exe` |
-| **Phase 5** | **Storage & Persistence** | SQLite (WAL mode) / In-Memory | **PLANNED** | Schema and WAL batching outlined in `AGENTS.md` |
-| **Phase 6** | **Incremental Scans** | Python 3.12+ (mtime, BLAKE3) | **PLANNED** | State caching and dirty file detection |
-| **Phase 7** | **Query Engine** | Python 3.12+ | **PLANNED** | BFS/DFS traversal, cycle detection, SCC Tarjan |
-| **Phase 8** | **AI / Agent Layer** | Python 3.12+ | **PLANNED** | High-level repository explanation and impact analysis |
+| **Pipeline E2E** | **Full Integrated Pipeline** | C++ / Python 3.12+ | **COMPLETE** | Verified end-to-end via `validator_e2e.py` on controlled sandbox, `graphs`, and `OS` |
+| **Phase 5** | **Relationship Ranker** | Python 3.12+ | **COMPLETE** | Verified via 39 unit/benchmark tests in `relationship-ranker/` |
+| **Phase 6** | **Storage & Persistence** | SQLite (WAL mode) / In-Memory | **PLANNED** | Schema and WAL batching outlined in `AGENTS.md` |
+| **Phase 7** | **Incremental Scans** | Python 3.12+ (mtime, BLAKE3) | **PLANNED** | State caching and dirty file detection |
+| **Phase 8** | **AI / Context Layer** | Python 3.12+ | **PLANNED** | High-level repository explanation and impact analysis |
 
 ---
 
